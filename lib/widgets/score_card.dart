@@ -21,55 +21,54 @@ class ScoreCard extends StatelessWidget {
   TextStyle _playerStyle(Player player) {
     final bool isHighlighted =
         selectedCountry != null && player.nationality == selectedCountry;
+
     return TextStyle(
       color: isHighlighted ? AppColors.green : AppColors.blue,
       fontSize: 13,
     );
   }
 
+  bool _isGoalie(Player player) {
+    return player.position?.toLowerCase() == 'goalie';
+  }
+
   Widget _buildPlayer(Player player, {required TextAlign align}) {
-    final isGoalie =
-        player.position?.toLowerCase() == 'goalie' ||
-        player.position == 'Goalie';
-    final name =
-        player.lastName ??
-        player.fullName ??
-        player.firstName ??
-        player.displayName();
+    final name = player.lastName ?? 'FIXME';
     final truncatedName = name.length > 14 ? name.substring(0, 14) : name;
 
-    final pointsDisplay = isGoalie
+    final stats = _isGoalie(player)
         ? '${player.saveShotsAgainst ?? '0/0'} ${player.savePercentage?.toStringAsFixed(1) ?? '0'}%'
         : '${player.goals ?? 0}+${player.assists ?? 0}';
+
+    final wrapAlignment = align == TextAlign.left
+        ? WrapAlignment.start
+        : WrapAlignment.end;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => onPlayerTap(player),
-        child: Column(
-          crossAxisAlignment: align == TextAlign.left
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.end,
+        child: Wrap(
+          alignment: wrapAlignment,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 6,
+          runSpacing: 2,
           children: [
             TeletextText(
               truncatedName,
               style: _playerStyle(player),
               textAlign: align,
-              overflow: TextOverflow.clip,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            if (isGoalie)
-              TeletextText(
-                pointsDisplay,
-                style: _playerStyle(player),
-                textAlign: align,
-              )
-            else
-              TeletextText(
-                pointsDisplay,
-                style: _playerStyle(player).copyWith(fontSize: 12),
-                textAlign: align,
-              ),
+            TeletextText(
+              stats,
+              style: _playerStyle(player),
+              textAlign: align,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
@@ -109,16 +108,10 @@ class ScoreCard extends StatelessWidget {
             style: const TextStyle(color: AppColors.green, fontSize: 16),
             textAlign: TextAlign.center,
           ),
-          if (game.timeRemaining != null)
+          if (game.status != null)
             TeletextText(
-              game.timeRemaining!,
-              style: const TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          if (game.period != null)
-            TeletextText(
-              game.period.toString(),
-              style: const TextStyle(fontSize: 12),
+              game.status!,
+              style: const TextStyle(fontSize: 10),
               textAlign: TextAlign.center,
             ),
         ],
@@ -129,7 +122,7 @@ class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.border)),
       ),

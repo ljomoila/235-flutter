@@ -19,6 +19,8 @@ class ScoresScreen extends StatefulWidget {
 }
 
 class _ScoresScreenState extends State<ScoresScreen> {
+  bool _isPullToRefresh = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,25 +36,42 @@ class _ScoresScreenState extends State<ScoresScreen> {
       builder: (context, state, _) {
         return Scaffold(
           appBar: const TopBar(title: '235'),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-                child: DateSelector(
-                  date: state.selectedDate,
-                  onPrevious: () => state.adjustDate(-1),
-                  onNext: () => state.adjustDate(1),
-                  onPick: state.changeDate,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                      child: DateSelector(
+                        date: state.selectedDate,
+                        onPrevious: () => state.adjustDate(-1),
+                        onNext: () => state.adjustDate(1),
+                        onPick: state.changeDate,
+                      ),
+                    ),
+                    Expanded(
+                      child: RefreshIndicator(
+                        color: AppColors.blue,
+                        onRefresh: () async {
+                          setState(() => _isPullToRefresh = true);
+                          await state.refreshScores();
+                          if (mounted) setState(() => _isPullToRefresh = false);
+                        },
+                        child: _buildBody(state),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Expanded(
-                child: RefreshIndicator(
-                  color: AppColors.blue,
-                  onRefresh: state.refreshScores,
-                  child: _buildBody(state),
-                ),
-              ),
-            ],
+                if (state.loadingScores && !_isPullToRefresh)
+                  Container(
+                    color: Colors.black.withOpacity(0.4),
+                    child: const Center(
+                      child: Loading(message: 'Loading scores...'),
+                    ),
+                  ),
+              ],
+            ),
           ),
         );
       },
@@ -61,7 +80,10 @@ class _ScoresScreenState extends State<ScoresScreen> {
 
   Widget _buildBody(AppState state) {
     if (state.loadingScores && state.games.isEmpty) {
-      return const Center(child: Loading(message: 'Loading scores...'));
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: const [],
+      );
     }
 
     if (state.errorMessage != null) {
@@ -105,8 +127,9 @@ class _ScoresScreenState extends State<ScoresScreen> {
           game: game,
           selectedCountry: state.selectedCountry,
           onPlayerTap: (player) {
-            state.openPlayer(player);
-            Navigator.of(context).pushNamed('/player');
+            // TODO: Implement player stats view
+            // state.openPlayer(player);
+            // Navigator.of(context).pushNamed('/player');
           },
         );
       },

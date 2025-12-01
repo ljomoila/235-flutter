@@ -29,7 +29,7 @@ Flutter app that shows NHL scores with a Teletext-inspired UI and highlights pla
 
   - iOS: `flutter run -d ios --dart-define-from-file=.env.json`
   - Android: `flutter run -d android --dart-define-from-file=.env.json`
-  - Web: `flutter run -d chrome --web-renderer html --dart-define-from-file=.env.json`
+  - Web: `flutter run -d chrome --dart-define-from-file=.env.json`
 
 ## Tests
 
