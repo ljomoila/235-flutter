@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      FLUTTER_VERSION: "3.10.1" # Pin exact stable version
+      FLUTTER_VERSION: "3.38.3" # Pin exact stable version
 
     steps:
       # ------------------------
