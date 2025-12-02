@@ -42,7 +42,7 @@ class _ScoresScreenState extends State<ScoresScreen> {
                 Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                       child: DateSelector(
                         date: state.selectedDate,
                         onPrevious: () => state.adjustDate(-1),

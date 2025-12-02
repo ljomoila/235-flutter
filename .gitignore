@@ -46,3 +46,4 @@ app.*.map.json
 
 # Local env
 .env.json
+.env.prod.json

@@ -14,10 +14,16 @@ class Loading extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CircularProgressIndicator(color: AppColors.blue, strokeWidth: 2),
+        const CircularProgressIndicator(
+          color: AppColors.purple,
+          strokeWidth: 2,
+        ),
         if (message != null) ...[
           const SizedBox(height: 8),
-          TeletextText(message!, style: const TextStyle(color: AppColors.blue)),
+          TeletextText(
+            message!,
+            style: const TextStyle(color: AppColors.purple),
+          ),
         ],
       ],
     );
