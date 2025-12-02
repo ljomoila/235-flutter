@@ -28,6 +28,9 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
+      - name: Set FLUTTER_ROOT
+        run: echo "FLUTTER_ROOT=${HOME}/flutter" >> $GITHUB_ENV
+
       # ------------------------
       # DEBUG FLUTTER
       # ------------------------
@@ -51,7 +54,6 @@ jobs:
       - name: Flutter Pub Get
         run: |
           flutter pub get
-          flutter precache
 
       # ------------------------
       # CACHE: CocoaPods
