@@ -49,7 +49,9 @@ jobs:
       # Get Flutter Dependencies
       # ------------------------
       - name: Flutter Pub Get
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter precache
 
       # ------------------------
       # CACHE: CocoaPods
