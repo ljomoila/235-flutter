@@ -1,4 +1,5 @@
 #!/bin/bash
 set -e
-cd "$XCS_SOURCE_DIR/ios"
+
+cd "$CI_WORKSPACE/ios"
 pod install --repo-update
