@@ -3,10 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>app-store</string>
-
-    <key>compileBitcode</key>
-    <false/>
+    <string>ad-hoc</string>
 
     <key>destination</key>
     <string>export</string>
@@ -14,8 +11,14 @@
     <key>signingStyle</key>
     <string>manual</string>
 
+    <key>compileBitcode</key>
+    <false/>
+
     <key>signingCertificate</key>
     <string></string>
+
+    <key>provisioningProfiles</key>
+    <dict></dict>
 
     <key>uploadSymbols</key>
     <false/>
