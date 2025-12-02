@@ -32,32 +32,27 @@ jobs:
       # DEBUG FLUTTER
       # ------------------------
       - name: Flutter Doctor
-        run: flutter doctor
+        run:
+          flutter doctor
 
+          # ------------------------
+      # Cache Pub packages
       # ------------------------
-      # CACHE: Pub packages
-      # ------------------------
-      - name: Cache Pub packages
+      - name: Cache Pub
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.pub-cache
+          path: ~/.pub-cache
           key: pub-cache-${{ hashFiles('pubspec.lock') }}
           restore-keys: pub-cache-
 
       # ------------------------
-      # Get Flutter Dependencies
+      # Get Flutter dependencies
       # ------------------------
       - name: Flutter Pub Get
         run: flutter pub get
 
-      - name: Check Podfile helper
-        run: |
-          cd ios
-          ls -la .symlinks/flutter/flutter_ios_build/
-
       # ------------------------
-      # CACHE: CocoaPods
+      # Cache CocoaPods
       # ------------------------
       - name: Cache CocoaPods
         uses: actions/cache@v4
@@ -70,15 +65,25 @@ jobs:
           restore-keys: cocoapods-
 
       # ------------------------
-      # Install Pods
+      # Generate iOS helpers (podhelper)
+      # ------------------------
+      - name: Prepare iOS Project
+        run: |
+          set -e
+          flutter precache --ios
+          flutter build ios --no-codesign || true
+
+      # ------------------------
+      # Install CocoaPods
       # ------------------------
       - name: Install CocoaPods
         run: |
+          set -e
           cd ios
           pod install --repo-update
 
       # ------------------------
-      # Increment build number
+      # Increment iOS build number
       # ------------------------
       - name: Bump iOS build number
         run: |
@@ -86,6 +91,7 @@ jobs:
           current_build=$(echo $version_line | sed -E 's/.*\+([0-9]+)/\1/')
           new_build=$((current_build + 1))
           sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$new_build/" pubspec.yaml
+          echo "Updated version:"
           grep "^version: " pubspec.yaml
 
       # ------------------------
