@@ -51,11 +51,10 @@ jobs:
       - name: Flutter Pub Get
         run: flutter pub get
 
-      # ------------------------
-      # Flutter Precache
-      # ------------------------
-      - name: Flutter Precache
-        run: flutter precache
+      - name: Check Podfile helper
+        run: |
+          cd ios
+          ls -la .symlinks/flutter/flutter_ios_build/
 
       # ------------------------
       # CACHE: CocoaPods
