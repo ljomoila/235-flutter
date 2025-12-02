@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      FLUTTER_VERSION: "3.13.0" # Pin exact stable version
+      FLUTTER_VERSION: "3.10.1" # Pin exact stable version
 
     steps:
       # ------------------------
@@ -71,6 +71,17 @@ jobs:
         run: |
           cd ios
           pod install --repo-update
+
+      # ------------------------
+      # Increment build number
+      # ------------------------
+      - name: Bump iOS build number
+        run: |
+          version_line=$(grep "^version: " pubspec.yaml)
+          current_build=$(echo $version_line | sed -E 's/.*\+([0-9]+)/\1/')
+          new_build=$((current_build + 1))
+          sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$new_build/" pubspec.yaml
+          grep "^version: " pubspec.yaml
 
       # ------------------------
       # Build iOS IPA
