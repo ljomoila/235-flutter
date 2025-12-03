@@ -115,3 +115,5 @@ jobs:
             workspace: Runner.xcworkspace \
             scheme: Runner \
             export_method: app-store \
+            api_key_path: AuthKey.p8 \
+            allow_provisioning_updates: true
