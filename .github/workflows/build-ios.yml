@@ -98,14 +98,7 @@ jobs:
       # Build iOS IPA
       # ------------------------
       - name: Build iOS IPA for App Store
-        run: flutter build ipa --release --no-codesign
-
-      - name: Export IPA from Archive
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath build/ios/archive/Runner.xcarchive \
-            -exportPath build/ios/ipa \
-            -exportOptionsPlist ios/exportOptions.plist
+        run: flutter build ipa --release --export-method app-store
 
       - name: List generated IPA
         run: ls -la build/ios/ipa/
