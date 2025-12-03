@@ -71,6 +71,7 @@ jobs:
         run: |
           set -e
           flutter precache --ios
+          flutter build ios --no-codesign || true
 
       # ------------------------
       # Install CocoaPods
