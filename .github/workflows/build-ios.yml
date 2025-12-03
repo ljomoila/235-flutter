@@ -46,23 +46,17 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane
 
-      # ------------------------
-      # CREATE AUTH KEY FILE
-      # ------------------------
       - name: Create App Store Connect API Key
-        run: echo "${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}" > AuthKey.p8
+        run: echo "${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}" > ./ios/AuthKey.p8
 
-      # ------------------------
-      # RUN FASTLANE
-      # ------------------------
       - name: Build & Upload to TestFlight
         run: |
           cd ios
           fastlane beta
         env:
-          APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
-          APPSTORE_CONNECT_API_KEY_ISSUER: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER }}
-          APPSTORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}
+          APPSTORE_CONNECT_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+          APPSTORE_CONNECT_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER }}
+          APPSTORE_CONNECT_KEY_PATH: ./ios/AuthKey.p8
 
       # # ------------------------
       # # DEBUG FLUTTER
