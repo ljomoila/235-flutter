@@ -1,4 +1,4 @@
-name: Build iOS App
+name: Build & Upload iOS App
 
 on:
   workflow_dispatch:
@@ -67,11 +67,11 @@ jobs:
       # ------------------------
       # Generate iOS helpers (podhelper)
       # ------------------------
-      - name: Prepare iOS Project
-        run: |
-          set -e
-          flutter precache --ios
-          flutter build ios --no-codesign || true
+      # - name: Prepare iOS Project
+      #   run: |
+      #     set -e
+      #     flutter precache --ios
+      #     flutter build ios --no-codesign || true
 
       # ------------------------
       # Install CocoaPods
@@ -83,7 +83,13 @@ jobs:
           pod install --repo-update
 
       # ------------------------
-      # Increment iOS build number
+      # Install Fastlane
+      # ------------------------
+      - name: Install Fastlane
+        run: sudo gem install fastlane
+
+      # ------------------------
+      # Increment build number
       # ------------------------
       - name: Bump iOS build number
         run: |
@@ -93,30 +99,6 @@ jobs:
           sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$new_build/" pubspec.yaml
           echo "Updated version:"
           grep "^version: " pubspec.yaml
-
-      # ------------------------
-      # Build iOS IPA
-      # ------------------------
-      # - name: Build iOS IPA for App Store
-      #   run: flutter build ipa --release --export-method app-store
-
-      # - name: List generated IPA
-      #   run: ls -la build/ios/ipa/
-
-      # ------------------------
-      # Upload artifacts
-      # ------------------------
-      # - name: Upload IPA artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ios-builds
-      #     path: build/ios/ipa/*.ipa
-
-      # ------------------------
-      # Install Fastlane
-      # ------------------------
-      - name: Install Fastlane
-        run: sudo gem install fastlane
 
       # ------------------------
       # Build and Upload to TestFlight
@@ -133,4 +115,3 @@ jobs:
             workspace: Runner.xcworkspace \
             scheme: Runner \
             export_method: app-store \
-            api_key_path: AuthKey.p8
