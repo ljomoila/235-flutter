@@ -67,11 +67,10 @@ jobs:
       # ------------------------
       # Generate iOS helpers (podhelper)
       # ------------------------
-      # - name: Prepare iOS Project
-      #   run: |
-      #     set -e
-      #     flutter precache --ios
-      #     flutter build ios --no-codesign || true
+      - name: Prepare iOS Project
+        run: |
+          set -e
+          flutter precache --ios
 
       # ------------------------
       # Install CocoaPods
