@@ -36,11 +36,11 @@ IFS='+' read -r FLUTTER_VERSION FLUTTER_BUILD <<< "$PUBSPEC_VERSION"
 
 echo "Setting version $FLUTTER_VERSION and build $FLUTTER_BUILD in Info.plist"
 
-# Update iOS Info.plist
-cd ios
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $FLUTTER_VERSION" "Runner/Info.plist"
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $FLUTTER_BUILD" "Runner/Info.plist"
-cd ..
+# Replace in pubspec.yaml
+sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$FLUTTER_BUILD/" pubspec.yaml
+
+# Show updated version
+grep "^version: " pubspec.yaml
 
 # -----------------------------
 # Optional: Build IPA (if not done in workflow)
