@@ -48,5 +48,3 @@ cd ..
 # flutter build ipa --export-options-plist=ios/ExportOptions.plist
 
 exit 0
-
-exit 0
