@@ -1,57 +1,38 @@
-## [fastlane match](https://docs.fastlane.tools/actions/match/)
+# 235 Flutter
 
-> Do not modify this file, as it gets overwritten every time you run _match_.
+Flutter app that shows NHL scores with a Teletext-inspired UI and highlights players from your selected country. Supports iOS, Android, and Web.
 
-This repository contains all your certificates and provisioning profiles needed to build and sign your applications. They are encrypted using OpenSSL via a passphrase.
+## Features
 
-**Important:** Make sure this repository is set to private and only your team members have access to this repo.
+- Pick a favorite country (persisted with `shared_preferences`) and highlight matching players
+- Scroll daily boxscores, jump dates, and pull-to-refresh
 
-### Installation
+## Getting Started
 
-Make sure you have the latest version of the Xcode command line tools installed:
+1. Install Flutter (tested with 3.38.3) and platform SDKs for your targets.
+2. Fetch dependencies:
+   ```bash
+   flutter pub get
+   ```
+3. (Optional) Set API endpoint and key. Defaults mirror the RN app. Either export env vars or create `.env.json` (see Run).
 
+## Run
+
+- Use a local `.env.json` (copy `.env.json.example`) and pass it:
+
+  ```json
+  {
+    "API_BASE_URL": "http://localhost:5069",
+    "API_KEY_VALUE": "changeme"
+  }
+  ```
+
+  - iOS: `flutter run -d "iPhone 16 Plus" --dart-define-from-file=.env.json`
+  - Android: `flutter run -d android --dart-define-from-file=.env.json`
+  - Web: `flutter run -d chrome --dart-define-from-file=.env.json`
+
+## Tests
+
+```bash
+flutter test
 ```
-xcode-select --install
-```
-
-Install _fastlane_ using bundler by following instructions here on [fastlane docs](https://docs.fastlane.tools).
-
-or alternatively using 
-
-`brew install fastlane`
-
-### Usage
-
-Navigate to your project folder and run
-
-```
-fastlane match appstore
-```
-
-```
-fastlane match adhoc
-```
-
-```
-fastlane match development
-```
-
-```
-fastlane match enterprise
-```
-
-For more information open [fastlane match git repo](https://docs.fastlane.tools/actions/match/)
-
-### Content
-
-#### certs
-
-This directory contains all your certificates with their private keys
-
-#### profiles
-
-This directory contains all provisioning profiles
-
----
-
-For more information open [fastlane match git repo](https://docs.fastlane.tools/actions/match/)
