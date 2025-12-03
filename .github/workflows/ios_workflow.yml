@@ -12,7 +12,7 @@ jobs:
     env:
       FLUTTER_VERSION: "3.38.3"
 
-     steps:
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -20,7 +20,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          channel: "stable"
 
       - name: Install dependencies
         run: flutter pub get
