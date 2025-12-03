@@ -29,91 +29,127 @@ jobs:
           cache: true
 
       # ------------------------
-      # DEBUG FLUTTER
-      # ------------------------
-      - name: Flutter Doctor
-        run:
-          flutter doctor
-
-          # ------------------------
-      # Cache Pub packages
-      # ------------------------
-      - name: Cache Pub
-        uses: actions/cache@v4
-        with:
-          path: ~/.pub-cache
-          key: pub-cache-${{ hashFiles('pubspec.lock') }}
-          restore-keys: pub-cache-
-
-      # ------------------------
-      # Get Flutter dependencies
+      # GET DEPENDENCIES
       # ------------------------
       - name: Flutter Pub Get
         run: flutter pub get
 
       # ------------------------
-      # Cache CocoaPods
+      # BUILD XCARCHIVE (no codesign)
       # ------------------------
-      - name: Cache CocoaPods
-        uses: actions/cache@v4
-        with:
-          path: |
-            ios/Pods
-            ~/Library/Caches/CocoaPods
-            ~/Library/Developer/Xcode/DerivedData
-          key: cocoapods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: cocoapods-
+      - name: Build iOS Archive
+        run: flutter build ipa --release --no-codesign
 
       # ------------------------
-      # Generate iOS helpers (podhelper)
-      # ------------------------
-      - name: Prepare iOS Project
-        run: |
-          set -e
-          flutter precache --ios
-          flutter build ios --no-codesign || true
-
-      # ------------------------
-      # Install CocoaPods
-      # ------------------------
-      - name: Install CocoaPods
-        run: |
-          set -e
-          cd ios
-          pod install --repo-update
-
-      # ------------------------
-      # Install Fastlane
+      # INSTALL FASTLANE
       # ------------------------
       - name: Install Fastlane
         run: sudo gem install fastlane
 
       # ------------------------
-      # Increment build number
+      # CREATE AUTH KEY FILE
       # ------------------------
-      - name: Bump iOS build number
-        run: |
-          version_line=$(grep "^version: " pubspec.yaml)
-          current_build=$(echo $version_line | sed -E 's/.*\+([0-9]+)/\1/')
-          new_build=$((current_build + 1))
-          sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$new_build/" pubspec.yaml
-          echo "Updated version:"
-          grep "^version: " pubspec.yaml
+      - name: Create App Store Connect API Key
+        run: echo "${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}" > AuthKey.p8
 
       # ------------------------
-      # Build and Upload to TestFlight
+      # RUN FASTLANE
       # ------------------------
-      - name: Build and upload to TestFlight
+      - name: Build & Upload to TestFlight
+        run: |
+          cd ios
+          fastlane beta
         env:
           APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
           APPSTORE_CONNECT_API_KEY_ISSUER: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER }}
           APPSTORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}
-        run: |
-          cd ios
-          echo "$APPSTORE_CONNECT_API_KEY_CONTENT" > AuthKey.p8
-          fastlane build_app \
-            workspace: Runner.xcworkspace \
-            scheme: Runner \
-            export_method: app-store \
-            api_key_path: AuthKey.p8 \
-            allow_provisioning_updates: true
+
+      # # ------------------------
+      # # DEBUG FLUTTER
+      # # ------------------------
+      # - name: Flutter Doctor
+      #   run:
+      #     flutter doctor
+
+      # # ------------------------
+      # # Cache Pub packages
+      # # ------------------------
+      # - name: Cache Pub
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.pub-cache
+      #     key: pub-cache-${{ hashFiles('pubspec.lock') }}
+      #     restore-keys: pub-cache-
+
+      # # ------------------------
+      # # Get Flutter dependencies
+      # # ------------------------
+      # - name: Flutter Pub Get
+      #   run: flutter pub get
+
+      # # ------------------------
+      # # Cache CocoaPods
+      # # ------------------------
+      # - name: Cache CocoaPods
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ios/Pods
+      #       ~/Library/Caches/CocoaPods
+      #       ~/Library/Developer/Xcode/DerivedData
+      #     key: cocoapods-${{ hashFiles('ios/Podfile.lock') }}
+      #     restore-keys: cocoapods-
+
+      # # ------------------------
+      # # Generate iOS helpers (podhelper)
+      # # ------------------------
+      # - name: Prepare iOS Project
+      #   run: |
+      #     set -e
+      #     flutter precache --ios
+      #     flutter build ios --no-codesign || true
+
+      # # ------------------------
+      # # Install CocoaPods
+      # # ------------------------
+      # - name: Install CocoaPods
+      #   run: |
+      #     set -e
+      #     cd ios
+      #     pod install --repo-update
+
+      # # ------------------------
+      # # Install Fastlane
+      # # ------------------------
+      # - name: Install Fastlane
+      #   run: sudo gem install fastlane
+
+      # # ------------------------
+      # # Increment build number
+      # # ------------------------
+      # - name: Bump iOS build number
+      #   run: |
+      #     version_line=$(grep "^version: " pubspec.yaml)
+      #     current_build=$(echo $version_line | sed -E 's/.*\+([0-9]+)/\1/')
+      #     new_build=$((current_build + 1))
+      #     sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$new_build/" pubspec.yaml
+      #     echo "Updated version:"
+      #     grep "^version: " pubspec.yaml
+
+      # # ------------------------
+      # # Build and Upload to TestFlight
+      # # ------------------------
+      # - name: Build and upload to TestFlight
+      #   env:
+      #     APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+      #     APPSTORE_CONNECT_API_KEY_ISSUER: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER }}
+      #     APPSTORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APPSTORE_CONNECT_API_KEY_CONTENT }}
+      #   run: |
+      #     cd ios
+      #     echo "$APPSTORE_CONNECT_API_KEY_CONTENT" > AuthKey.p8
+      #     fastlane build_app \
+      #       workspace: Runner.xcworkspace \
+      #       scheme: Runner \
+      #       export_method: app-store \
+      #       api_key_path: AuthKey.p8 \
+      #       allow_provisioning_updates: true
