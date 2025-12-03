@@ -97,20 +97,20 @@ jobs:
       # ------------------------
       # Build iOS IPA
       # ------------------------
-      - name: Build iOS IPA for App Store
-        run: flutter build ipa --release --export-method app-store
+      # - name: Build iOS IPA for App Store
+      #   run: flutter build ipa --release --export-method app-store
 
-      - name: List generated IPA
-        run: ls -la build/ios/ipa/
+      # - name: List generated IPA
+      #   run: ls -la build/ios/ipa/
 
       # ------------------------
       # Upload artifacts
       # ------------------------
-      - name: Upload IPA artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-builds
-          path: build/ios/ipa/*.ipa
+      # - name: Upload IPA artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ios-builds
+      #     path: build/ios/ipa/*.ipa
 
       # ------------------------
       # Install Fastlane
@@ -119,10 +119,9 @@ jobs:
         run: sudo gem install fastlane
 
       # ------------------------
-      # Upload to TestFlight
+      # Build and Upload to TestFlight
       # ------------------------
-      - name: Upload to TestFlight
-        if: github.ref == 'refs/heads/main'
+      - name: Build and upload to TestFlight
         env:
           APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
           APPSTORE_CONNECT_API_KEY_ISSUER: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER }}
@@ -130,9 +129,8 @@ jobs:
         run: |
           cd ios
           echo "$APPSTORE_CONNECT_API_KEY_CONTENT" > AuthKey.p8
-          fastlane deliver \
-            --ipa ../build/ios/ipa/*.ipa \
-            --api_key_path AuthKey.p8 \
-            --skip_screenshots \
-            --skip_metadata \
-            --skip_app_version_update
+          fastlane build_app \
+            workspace: Runner.xcworkspace \
+            scheme: Runner \
+            export_method: app-store \
+            api_key_path: AuthKey.p8
