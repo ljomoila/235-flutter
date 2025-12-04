@@ -7,14 +7,14 @@ set -e
 cd $CI_PRIMARY_REPOSITORY_PATH # change working directory to the root of your cloned repo.
 
 # Install Flutter using git.
-# git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
-# export PATH="$PATH:$HOME/flutter/bin"
+git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
+export PATH="$PATH:$HOME/flutter/bin"
 
 # Install Flutter artifacts for iOS (--ios), or macOS (--macos) platforms.
 flutter precache --ios
 
 # Install Flutter dependencies.
-#flutter pub get
+flutter pub get
 
 # -----------------------------
 # Set version/build from pubspec.yaml
@@ -41,6 +41,9 @@ brew install cocoapods
 cd ios && pod install # run `pod install` in the `ios` directory.
 
 cd ..
+
+echo "Running Flutter tests..."
+flutter test --no-pub
 
 echo "Running Flutter build with API_BASE_URL=$API_BASE_URL"
 
