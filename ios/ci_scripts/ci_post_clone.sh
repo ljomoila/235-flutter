@@ -42,9 +42,12 @@ cd ios && pod install # run `pod install` in the `ios` directory.
 
 cd ..
 
-# -----------------------------
-# Optional: Build IPA (if not done in workflow)
-# -----------------------------
-# flutter build ipa --export-options-plist=ios/ExportOptions.plist
+echo "Running Flutter build with API_BASE_URL=$API_BASE_URL"
+
+flutter build ipa \
+  --release \
+  --no-codesign \
+  --dart-define=API_BASE_URL=$API_BASE_URL \
+  --dart-define=API_KEY_VALUE=$API_KEY_VALUE \
 
 exit 0
