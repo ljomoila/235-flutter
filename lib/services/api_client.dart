@@ -10,12 +10,11 @@ class ApiClient {
 
   final http.Client _client;
 
-  static const String _defaultBaseUrl = 'http://localhost:5069';
   static const String _apiKeyHeader = 'X-API-Key';
 
   static const String _baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: _defaultBaseUrl,
+    defaultValue: 'http://localhost:5069',
   );
 
   static const String _apiKeyValue = String.fromEnvironment(

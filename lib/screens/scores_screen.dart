@@ -93,6 +93,10 @@ class _ScoresScreenState extends State<ScoresScreen> {
         children: [
           NotificationBanner(message: 'Failed to load games'),
           const SizedBox(height: 12),
+          TeletextText(
+            state.errorMessage!,
+            style: TextStyle(color: Colors.red.withValues(alpha: 0.7)),
+          ),
         ],
       );
     }

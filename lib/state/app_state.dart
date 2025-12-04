@@ -14,6 +14,7 @@ class AppState extends ChangeNotifier {
   bool loadingScores = false;
   bool loadingPlayer = false;
   bool? apiCallFailed = false;
+  String? errorMessage;
   String? playerStatsError;
   List<Game> games = [];
   String? selectedCountry;
@@ -75,6 +76,7 @@ class AppState extends ChangeNotifier {
     try {
       games = await apiClient.fetchGames(selectedDate);
     } catch (e) {
+      errorMessage = e.toString();
       apiCallFailed = true;
     } finally {
       loadingScores = false;
