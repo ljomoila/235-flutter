@@ -16,15 +16,6 @@ flutter precache --ios
 # Install Flutter dependencies.
 flutter pub get
 
-# Install CocoaPods using Homebrew.
-HOMEBREW_NO_AUTO_UPDATE=1 # disable homebrew's automatic updates.
-brew install cocoapods
-
-# Install CocoaPods dependencies.
-cd ios && pod install # run `pod install` in the `ios` directory.
-
-cd ..
-
 # -----------------------------
 # Set version/build from pubspec.yaml
 # -----------------------------
@@ -34,13 +25,22 @@ PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}')
 # Split version and build
 IFS='+' read -r FLUTTER_VERSION FLUTTER_BUILD <<< "$PUBSPEC_VERSION"
 
-echo "Setting version $FLUTTER_VERSION and build $FLUTTER_BUILD in Info.plist"
+echo "Setting version $FLUTTER_VERSION and build $FLUTTER_BUILD in pubspec.yaml"
 
 # Replace in pubspec.yaml
 sed -i '' -E "s/(version: .*\\+)[0-9]+/\1$FLUTTER_BUILD/" pubspec.yaml
 
 # Show updated version
 grep "^version: " pubspec.yaml
+
+# Install CocoaPods using Homebrew.
+HOMEBREW_NO_AUTO_UPDATE=1 # disable homebrew's automatic updates.
+brew install cocoapods
+
+# Install CocoaPods dependencies.
+cd ios && pod install # run `pod install` in the `ios` directory.
+
+cd ..
 
 # -----------------------------
 # Optional: Build IPA (if not done in workflow)
