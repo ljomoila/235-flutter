@@ -13,8 +13,7 @@ class AppState extends ChangeNotifier {
   bool initializing = true;
   bool loadingScores = false;
   bool loadingPlayer = false;
-  bool? apiCallFailed = false;
-  String? errorMessage;
+  String? scoresError;
   String? playerStatsError;
   List<Game> games = [];
   String? selectedCountry;
@@ -62,7 +61,6 @@ class AppState extends ChangeNotifier {
   }) async {
     if (skipIfUnselected && selectedCountry == null) {
       games = [];
-      apiCallFailed = false;
       notifyListeners();
       return;
     }
@@ -70,14 +68,13 @@ class AppState extends ChangeNotifier {
     if (loadingScores && !force) return;
 
     loadingScores = true;
-    apiCallFailed = false;
+    scoresError = null;
     notifyListeners();
 
     try {
       games = await apiClient.fetchGames(selectedDate);
     } catch (e) {
-      errorMessage = e.toString();
-      apiCallFailed = true;
+      scoresError = e.toString();
     } finally {
       loadingScores = false;
       notifyListeners();

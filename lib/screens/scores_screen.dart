@@ -86,17 +86,15 @@ class _ScoresScreenState extends State<ScoresScreen> {
       );
     }
 
-    if (state.apiCallFailed == true) {
+    if (state.scoresError != null) {
+      debugPrint("Error: failed to get scores: ${state.scoresError}");
+
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         children: [
           NotificationBanner(message: 'Failed to load games'),
           const SizedBox(height: 12),
-          TeletextText(
-            state.errorMessage!,
-            style: TextStyle(color: Colors.red.withValues(alpha: 0.7)),
-          ),
         ],
       );
     }

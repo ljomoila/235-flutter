@@ -42,6 +42,7 @@ cd ios && pod install # run `pod install` in the `ios` directory.
 
 cd ..
 
+# Run Flutter tests.
 echo "Running Flutter tests..."
 flutter test --no-pub
 
