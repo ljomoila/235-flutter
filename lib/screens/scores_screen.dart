@@ -87,7 +87,7 @@ class _ScoresScreenState extends State<ScoresScreen> {
     }
 
     if (state.scoresError != null) {
-      debugPrint("Error: failed to get scores: ${state.scoresError}");
+      debugPrint("Error: Failed to load games: ${state.scoresError}");
 
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -125,9 +125,8 @@ class _ScoresScreenState extends State<ScoresScreen> {
           game: game,
           selectedCountry: state.selectedCountry,
           onPlayerTap: (player) {
-            // TODO: Implement player stats view
-            // state.openPlayer(player);
-            // Navigator.of(context).pushNamed('/player');
+            state.openPlayer(player);
+            Navigator.of(context).pushNamed('/player');
           },
         );
       },

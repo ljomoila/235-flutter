@@ -19,7 +19,7 @@ class PlayerDetailScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: TopBar(
-            title: player?.displayName() ?? 'Player',
+            title: player?.fullName ?? 'FIXME',
             onBack: () {
               state.clearPlayer();
               Navigator.of(context).pop();
@@ -34,18 +34,88 @@ class PlayerDetailScreen extends StatelessWidget {
     );
   }
 
+  String getLabel(String key) {
+    switch (key) {
+      case 'gamesPlayed':
+        return 'Games Played';
+      case 'points':
+        return 'Points';
+      case 'assists':
+        return 'Assists';
+      case 'goals':
+        return 'Goals';
+      case 'pim':
+        return 'Penalty Minutes';
+      case 'avgToi':
+        return 'Average Time on Ice';
+      case 'plusMinus':
+        return 'Plus/Minus';
+      case 'shots':
+        return 'Shots';
+      case 'shotsOnGoal':
+        return 'Shots on Goal';
+      case 'powerPlayGoals':
+        return 'Power Play Goals';
+      case 'powerPlayPoints':
+        return 'Power Play Points';
+      case 'shortHandedGoals':
+        return 'Short Handed Goals';
+      case 'shortHandedPoints':
+        return 'Short Handed Points';
+      case 'shootingPctg':
+        return 'Shooting Percentage';
+      case 'faceoffWinningPctg':
+        return 'Face Off Winning Perc';
+
+      // Goalie stats
+      case 'gamesStarted':
+        return 'Games Started';
+      case 'shotsAgainst':
+        return 'Shots Against';
+      case 'savePercentage':
+        return 'Save Percentage';
+      case 'goalsAgainstAverage':
+        return 'Goals Against Average';
+      case 'wins':
+        return 'Wins';
+      case 'losses':
+        return 'Losses';
+      case 'shutouts':
+        return 'Shutouts';
+      case 'otLosses':
+        return 'Overtime Losses';
+      case 'goalsAgainst':
+        return 'Goals Against';
+      default:
+        return key;
+    }
+  }
+
   Widget _buildBody(AppState state) {
     if (state.loadingPlayer) {
       return const Center(child: Loading(message: 'Loading stats...'));
     }
 
-    if (state.playerStatsError != null || state.playerStats == null) {
+    if (state.playerStats == null) {
+      return const SizedBox.shrink();
+    }
+
+    if (state.playerStatsError != null) {
       return NotificationBanner(
         message: state.playerStatsError ?? 'Failed to load player stats',
       );
     }
 
-    final entries = state.playerStats!.entries.toList();
+    final entries = state.playerStats!.entries
+        .map((entry) {
+          // Filter out null values
+          if (entry.value == null) {
+            return null;
+          }
+          return MapEntry(entry.key, entry.value);
+        })
+        .whereType<MapEntry<String, dynamic>>()
+        .toList();
 
     if (entries.isEmpty) {
       return const NotificationBanner(
@@ -65,7 +135,7 @@ class PlayerDetailScreen extends StatelessWidget {
             Expanded(
               flex: 2,
               child: TeletextText(
-                entry.key,
+                getLabel(entry.key),
                 style: const TextStyle(color: AppColors.blue),
               ),
             ),
@@ -74,6 +144,7 @@ class PlayerDetailScreen extends StatelessWidget {
               child: TeletextText(
                 entry.value.toString(),
                 textAlign: TextAlign.right,
+                style: const TextStyle(color: AppColors.purple),
               ),
             ),
           ],

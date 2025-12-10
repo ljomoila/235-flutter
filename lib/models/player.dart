@@ -34,6 +34,10 @@ class Player {
       return double.tryParse(value.toString());
     }
 
+    // Backend may only expose a combined fullName, so derive first/last if missing.
+    String firstName = json['fullName']["default"][0];
+    String lastName = json['lastName'];
+
     int? parseInt(dynamic value) {
       if (value == null) return null;
       if (value is int) return value;
@@ -44,9 +48,9 @@ class Player {
     return Player(
       id: parseInt(json['id']),
       playerId: parseInt(json['playerId']),
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
-      fullName: json['fullName'] as String?,
+      firstName: firstName,
+      lastName: lastName,
+      fullName: json['fullName'],
       nationality: json['nationality'] as String?,
       position: json['position'] as String?,
       goals: parseInt(json['goals']),
@@ -56,6 +60,4 @@ class Player {
       savePercentage: parseDouble(json['savePercentage']),
     );
   }
-
-  String displayName() => lastName ?? fullName ?? firstName ?? 'Unknown';
 }
