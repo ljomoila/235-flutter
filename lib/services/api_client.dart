@@ -36,11 +36,8 @@ class ApiClient {
     throw Exception('Unexpected games payload');
   }
 
-  Future<Map<String, dynamic>> fetchPlayerStats(
-    int playerId, {
-    String statsType = 'yearByYear',
-  }) async {
-    final data = await _get('/players/$playerId/stats/$statsType');
+  Future<Map<String, dynamic>> fetchPlayerStats(int playerId) async {
+    final data = await _get('/players/$playerId/stats/current');
 
     if (data is Map<String, dynamic>) {
       return data;
