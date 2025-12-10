@@ -35,7 +35,7 @@ class Player {
     }
 
     // Backend may only expose a combined fullName, so derive first/last if missing.
-    String firstName = ''; //json['fullName']["default"][0];
+    String firstName = json['fullName']["default"][0];
     String lastName = json['lastName'];
 
     int? parseInt(dynamic value) {
