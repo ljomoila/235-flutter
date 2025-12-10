@@ -48,8 +48,8 @@ class Player {
     return Player(
       id: parseInt(json['id']),
       playerId: parseInt(json['playerId']),
-      firstName: firstName,
-      lastName: lastName,
+      firstName: json['firstName'],
+      lastName: json['lastName'],
       fullName: json['fullName'],
       nationality: json['nationality'] as String?,
       position: json['position'] as String?,
