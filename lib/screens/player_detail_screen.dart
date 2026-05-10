@@ -19,7 +19,7 @@ class PlayerDetailScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: TopBar(
-            title: player?.fullName ?? 'FIXME',
+            title: player?.name ?? 'FIXME',
             onBack: () {
               state.clearPlayer();
               Navigator.of(context).pop();
@@ -144,7 +144,7 @@ class PlayerDetailScreen extends StatelessWidget {
               child: TeletextText(
                 entry.value.toString(),
                 textAlign: TextAlign.right,
-                style: const TextStyle(color: AppColors.purple),
+                style: const TextStyle(color: AppColors.white),
               ),
             ),
           ],

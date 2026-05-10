@@ -16,7 +16,7 @@ Flutter app that shows NHL scores with a Teletext-inspired UI and highlights pla
    ```
 3. (Optional) Set API endpoint and key. Defaults mirror the RN app. Either export env vars or create `.env.json` (see Run).
 
-## Run
+## Setup environment variables
 
 - Use a local `.env.json` (copy `.env.json.example`) and pass it:
 
@@ -27,9 +27,16 @@ Flutter app that shows NHL scores with a Teletext-inspired UI and highlights pla
   }
   ```
 
-  - iOS: `flutter run -d "simulator-name" --dart-define-from-file=.env.json`
-  - Android: `flutter run -d android --dart-define-from-file=.env.json`
-  - Web: `flutter run -d chrome --dart-define-from-file=.env.json`
+## Open simulator
+
+- launch Xcode once.
+- run ios simulator -> XCode -> Open Developer Tool -> Simulator
+
+## Run
+
+- iOS: `flutter run -d "simulator-name" --dart-define-from-file=.env.json`
+- Android: `flutter run -d android --dart-define-from-file=.env.json`
+- Web: `flutter run -d chrome --dart-define-from-file=.env.json`
 
 ## Tests
 
