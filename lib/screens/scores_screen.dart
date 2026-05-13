@@ -86,9 +86,25 @@ class _ScoresScreenState extends State<ScoresScreen> {
       );
     }
 
-    final error = state.scoresError;
+    bool hasError = state.scoresError != null;
+    bool isNotFound = state.scoresError?.contains("404") == true;
 
-    if (state.games.isEmpty || error?.contains("404") == true) {
+    if (hasError && !isNotFound) {
+      debugPrint("Error: Failed to load games: ${state.scoresError}");
+
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        children: [
+          NotificationBanner(
+            message: 'Failed to load games: ${state.scoresError}',
+          ),
+          const SizedBox(height: 12),
+        ],
+      );
+    }
+
+    if (state.games.isEmpty || isNotFound) {
       return ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         children: const [
@@ -101,19 +117,6 @@ class _ScoresScreenState extends State<ScoresScreen> {
               ),
             ),
           ),
-        ],
-      );
-    }
-
-    if (error != null) {
-      debugPrint("Error: Failed to load games: $error");
-
-      return ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        children: [
-          NotificationBanner(message: 'Failed to load games'),
-          const SizedBox(height: 12),
         ],
       );
     }
