@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -14,7 +15,7 @@ class ApiClient {
 
   static const String _baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://localhost:5069',
+    defaultValue: 'http://localhost:3000',
   );
 
   static const String _apiKeyValue = String.fromEnvironment(

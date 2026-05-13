@@ -29,15 +29,15 @@ class ScoreCard extends StatelessWidget {
   }
 
   bool _isGoalie(Player player) {
-    return player.position?.toLowerCase() == 'goalie';
+    return player.position?.toLowerCase() == 'g';
   }
 
   Widget _buildPlayer(Player player, {required TextAlign align}) {
-    final name = player.lastName ?? 'FIXME';
+    final name = player.name ?? 'FIXME';
     final truncatedName = name.length > 14 ? name.substring(0, 14) : name;
 
     final stats = _isGoalie(player)
-        ? '${player.saveShotsAgainst ?? '0/0'} ${player.savePercentage?.toStringAsFixed(1) ?? '0'}%'
+        ? '${player.saves ?? 0}/${player.shotsAgainst ?? 0} ${player.savePercentage?.toStringAsFixed(1) ?? '0'}%'
         : '${player.goals ?? 0}+${player.assists ?? 0}';
 
     final wrapAlignment = align == TextAlign.left
@@ -85,7 +85,7 @@ class ScoreCard extends StatelessWidget {
             : CrossAxisAlignment.end,
         children: [
           TeletextText(
-            team.shortName ?? team.name,
+            team.name,
             style: const TextStyle(fontSize: 16, color: AppColors.white),
             textAlign: align,
           ),
@@ -97,14 +97,14 @@ class ScoreCard extends StatelessWidget {
   }
 
   Widget _buildScore() {
-    final int homeGoals = game.home.goals ?? 0;
-    final int awayGoals = game.away.goals ?? 0;
+    final int homeScore = game.home.score ?? 0;
+    final int awayScore = game.away.score ?? 0;
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TeletextText(
-            '$homeGoals-$awayGoals',
+            '$homeScore-$awayScore',
             style: const TextStyle(color: AppColors.green, fontSize: 16),
             textAlign: TextAlign.center,
           ),

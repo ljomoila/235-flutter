@@ -89,7 +89,7 @@ class AppState extends ChangeNotifier {
     loadingPlayer = true;
     notifyListeners();
 
-    final id = player.id ?? player.playerId;
+    final id = player.id;
     if (id == null) {
       playerStatsError = 'Player id missing';
       loadingPlayer = false;

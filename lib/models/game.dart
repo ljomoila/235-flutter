@@ -9,9 +9,9 @@ class Game {
 
   factory Game.fromJson(Map<String, dynamic> json) {
     return Game(
-      home: Team.fromJson((json['home'] as Map<String, dynamic>? ?? {})),
-      away: Team.fromJson((json['away'] as Map<String, dynamic>? ?? {})),
-      status: json['status']?.toString(),
+      home: Team.fromJson((json['homeTeam'] as Map<String, dynamic>? ?? {})),
+      away: Team.fromJson((json['awayTeam'] as Map<String, dynamic>? ?? {})),
+      status: json['timeRemaining']?.toString(),
     );
   }
 }

@@ -3,17 +3,11 @@ import 'player.dart';
 class Team {
   final int? id;
   final String name;
-  final String? shortName;
-  final int? goals;
+  final int? score;
   final List<Player> players;
 
-  Team({
-    this.id,
-    required this.name,
-    this.shortName,
-    this.goals,
-    List<Player>? players,
-  }) : players = players ?? [];
+  Team({this.id, required this.name, this.score, List<Player>? players})
+    : players = players ?? [];
 
   factory Team.fromJson(Map<String, dynamic> json) {
     int? parseInt(dynamic value) {
@@ -27,8 +21,7 @@ class Team {
     return Team(
       id: parseInt(json['id']),
       name: json['name']?.toString() ?? 'Unknown team',
-      shortName: json['shortName'] as String?,
-      goals: parseInt(json['goals']),
+      score: parseInt(json['score']),
       players: rawPlayers
           .whereType<Map<String, dynamic>>()
           .map(Player.fromJson)
